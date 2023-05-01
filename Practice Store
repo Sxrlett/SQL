@@ -1,0 +1,28 @@
+CREATE TABLE makeup_store (id INTEGER PRIMARY KEY, item TEXT, description TEXT, price INTEGER, Qty INTEGER);
+
+INSERT INTO makeup_store VALUES(1, "Face-on", "face masksx10", 15.00, 24);
+INSERT INTO makeup_store VALUES (2, "TipDip", "eyeliner", 9.99, 5);
+INSERT INTO makeup_store VALUES(3, "Facinate", "eyeshadow", 10.99, 20);
+INSERT INTO makeup_store VALUES (4, "HelloMaybe", "face cream", 15, 78);
+INSERT INTO makeup_store VALUES(5, "Face-off", "makeup remover", 20.50, 104);
+INSERT INTO makeup_store VALUES (6, "TumbleWeed", "hair brush", 7.5, 19);
+INSERT INTO makeup_store VALUES(7, "Commotion", "lipstick", 30.00, 17);
+INSERT INTO makeup_store VALUES (8, "FreshDew", "hairspray", 15, 79);
+INSERT INTO makeup_store VALUES(9, "Basic", "foundation", 35, 22);
+INSERT INTO makeup_store VALUES (10, "Night Sleep", "concealer", 9, 5);
+INSERT INTO makeup_store VALUES(11, "Fantasy", "perfume", 105, 10);
+INSERT INTO makeup_store VALUES (12, "TallyUp", "collagen serum", 50, 15);
+INSERT INTO makeup_store VALUES(13, "Brownie", "brow duo", 8, 20);
+INSERT INTO makeup_store VALUES (14, "Rough'n It", "dry shampoo", 19, 7);
+INSERT INTO makeup_store VALUES(15, "LocoMotion", "lipstick2", 38, 31);
+
+--displays item and quantity ordered by price asc
+SELECT item, Qty FROM makeup_store ORDER BY price;
+--displays item, price and quantity only if quantity is greater than 40, ordered by price in desc
+SELECT item, price, Qty FROM makeup_store WHERE Qty > 40 ORDER BY price desc;
+--displays total quantity of items in the store
+SELECT SUM(Qty) FROM makeup_store;
+--displays the max price
+SELECT MAX(price) FROM makeup_store;
+--displays the item with the biggest quantity
+SELECT item, MAX(Qty) FROM makeup_store;
