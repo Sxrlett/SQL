@@ -59,9 +59,40 @@ VALUES
     ('Company JJ', 'Manufacturing', 370.0, 3100, 1, 20, 12, 7.6),
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
---show all rows and colunbs in table
+# Show all data in the table
 SELECT * FROM fortune_companies;
 
-SELECT * FROM fortune_companies
-WHERE industry = "Telecommunications"
+# Query some useful values
+SELECT MAX(paid_time_off_days) AS max_pto, AVG(paid_time_off_days) AS avg_pto, MAX(revenue) AS most_rev, MIN(revenue) AS least_rev, MAX(employees) AS most_wf, MIN(employees) AS least_wf, MAX(maternity_leave_weeks) AS max_maternity, AVG(maternity_leave_weeks) AS avg_maternity
+FROM fortune_companies;
+
+# Query total employees per industry which has between 50000 and 200000 employees
+SELECT ROUND(AVG(avg_employee_tenure),1) AS tenure_avg, industry, SUM(employees) AS work_force
+FROM fortune_companies
+GROUP BY industry
+HAVING work_force >= 50000 AND work_force <200000
+ORDER BY work_force DESC;
+
+# Query companies in Telecommunication and Technology fields which offer more than 15 PTO days, sort by revenue
+SELECT company_name, industry, revenue, paid_time_off_days
+FROM fortune_companies
+WHERE paid_time_off_days >= 15 AND industry IN ("Telecommunications", "Technology")
 ORDER BY revenue DESC;
+
+# Query company details and add a column for rating based on PTO of companies that offer health benefits, sort by revenue
+SELECT company_name, industry, revenue,
+CASE WHEN paid_time_off_days >= 21 THEN "Great Score"
+WHEN paid_time_off_days >= 18 THEN "Good Score" 
+WHEN paid_time_off_days >= 15 THEN "Not Too Bad"
+ELSE "Below Standard" END AS rating
+FROM fortune_companies
+WHERE healthcare_benefits = 1
+ORDER BY revenue DESC;
+
+# Query sum of employees per industry having at least 45000 employees, only add to sum if individual company offers health care 
+SELECT industry, SUM(employees) AS work_force
+FROM fortune_companies
+WHERE healthcare_benefits = 1 
+GROUP BY industry
+HAVING work_force > 45000
+ORDER BY work_force DESC;
