@@ -1,3 +1,6 @@
+#What would you want to know about a company before working there? 
+#What would be an interesting way to compare companies or industries?
+
 CREATE TABLE fortune_companies (
     company_id INTEGER PRIMARY KEY,
     company_name TEXT,
@@ -56,14 +59,9 @@ VALUES
     ('Company JJ', 'Manufacturing', 370.0, 3100, 1, 20, 12, 7.6),
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
-/*shows column with number of rows (companies) that satisfy arguments below, the industry they belong to, 
-and the rating based on PTO or maternity leave */
+--show all rows and colunbs in table
+SELECT * FROM fortune_companies;
 
-SELECT COUNT(*), industry, 
-CASE WHEN AVG(paid_time_off_days) >= 20 OR maternity_leave_weeks >= 14 THEN "BEST"
-WHEN AVG(paid_time_off_days) >= 15 OR maternity_leave_weeks >= 10 THEN "GOOD"
-WHEN AVG(paid_time_off_days) >= 10 OR maternity_leave_weeks >= 7 THEN "NOT BAD"
-ELSE "Look somewhere else!" END AS pto_rating
-FROM fortune_companies
-GROUP BY industry
-HAVING avg_employee_tenure >= 6;
+SELECT * FROM fortune_companies
+WHERE industry = "Telecommunications"
+ORDER BY revenue DESC;
