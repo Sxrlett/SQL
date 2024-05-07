@@ -1,5 +1,5 @@
 # These are various coursework analyses 
---Basic analysis using TABLE #1: products and TABLE #2: customer_subscriptions
+--Basic relational database analysis
 -- TELECOM DATA TABLE #1: products
 CREATE TABLE products (
     product_id INTEGER PRIMARY KEY,
@@ -58,3 +58,45 @@ FROM customer_subscriptions
 --relate email in T2 to T1 by customer_id 
 --query customer_id in T1 if the product_type = "Internet"
 WHERE customer_id IN (SELECT customer_id FROM products WHERE product_type = "Internet");
+
+
+# Basic analysis HAVING 
+CREATE TABLE employees (
+    employee_id INTEGER PRIMARY KEY,
+    department TEXT,
+    salary DECIMAL(10, 2),
+    years_of_experience INTEGER
+);
+
+INSERT INTO employees (employee_id, department, salary, years_of_experience)
+VALUES
+    (1, 'Finance', 60000.00, 5),
+    (2, 'Marketing', 55000.00, 3),
+    (3, 'Sales', 75000.00, 8),
+    (4, 'Engineering', 80000.00, 7),
+    (5, 'HR', 50000.00, 2),
+    (6, 'Finance', 70000.00, 6),
+    (7, 'Marketing', 60000.00, 4),
+    (8, 'Sales', 85000.00, 10),
+    (9, 'Engineering', 90000.00, 9),
+    (10, 'HR', 55000.00, 3),
+    (11, 'Sales', 72000.00, 6),
+    (12, 'Sales', 80000.00, 7),
+    (13, 'Engineering', 85000.00, 8),
+    (14, 'Engineering', 92000.00, 10);
+--show department name and the total spent on(sum of) salaries in that department per year where the total sum of salaries is at least $300,000
+
+SELECT department, SUM(salary) AS total_spent
+FROM employees
+GROUP BY department
+--because new column is an aggregate use HAVING 
+HAVING total_spent >= 300000;
+
+--departments that pay an average of at least $70,000 per year
+
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department
+--because new column is an aggregate use HAVING 
+HAVING avg_salary >= 70000;
+
