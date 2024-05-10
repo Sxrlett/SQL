@@ -1,0 +1,57 @@
+# In this analysis I'm querying a database with multiple tables to explore statistics of customers and orders
+
+-- Count of all valid order IDs and basic field exploration
+SELECT * FROM customers
+WHERE length(order_id) = 6
+LIMIT 10;
+
+-- How many Jan orders
+SELECT COUNT(*) FROM JanSales
+WHERE length(orderID) =6;
+-- How many Jan orders were iPhones
+SELECT COUNT(*) FROM JanSales
+WHERE length(orderID) =6
+AND Product = 'iPhone';
+
+-- Account numbers of customers who placed orders in Feb
+SELECT DISTINCT acctnum FROM customers 
+INNER JOIN FebSales ON customers.order_id=FebSales.orderID
+WHERE length(order_id) =6
+LIMIT 5;
+-- How many customers placed an order in Feb
+SELECT COUNT(DISTINCT acctnum) FROM customers 
+INNER JOIN FebSales ON customers.order_id=FebSales.orderID
+WHERE length(order_id) =6;
+
+
+-- Which product was the cheapest sold in January, and what was the price?
+SELECT distinct Product, price FROM JanSales
+WHERE price <= (SELECT MIN(price) FROM JanSales)
+AND length(orderID) =6;
+-- 
+-- What is the total revenue for each product sold in January?
+SELECT Product, SUM(Quantity), SUM(Quantity)*price AS Revenue 
+FROM JanSales
+WHERE length(orderID) =6
+GROUP BY Product;
+
+-- products sold in February where location, qty, sum qty * price 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and total revenue 
+SELECT Product, SUM(Quantity) AS Product_Qty, SUM(Quantity)*price AS Revenue 
+FROM FebSales
+WHERE length(orderID) =6
+AND location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY Product;
+
+-- How many customers ordered more than 2 products at a time in February 
+SELECT DISTINCT acctnum, orderdate
+FROM customers INNER JOIN FebSales ON customers.order_id=FebSales.orderID
+WHERE length(orderID) =6
+AND FebSales.Quantity > 2
+GROUP BY acctnum;
+-- What was the avg spend for these customers
+SELECT COUNT(DISTINCT acctnum), AVG(Quantity*price)
+FROM FebSales LEFT JOIN customers ON orderID=order_id
+WHERE Quantity > 2
+AND length(orderID) =6;
+
+
