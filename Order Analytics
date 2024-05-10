@@ -98,9 +98,9 @@ WHERE length(orderID) = 6;
 
 -- Which product brought in the most revenue in January and 
 -- how much revenue did it bring in total?
-SELECT Product, SUM(Quantity)*price AS tot_rev
+SELECT Product, SUM(Quantity*price) AS tot_rev
 FROM JanSales
 WHERE length(orderID) = 6
 GROUP BY Product
-HAVING tot_rev = MAX(tot_rev);
+ORDER BY tot_rev DESC LIMIT 1;
 
