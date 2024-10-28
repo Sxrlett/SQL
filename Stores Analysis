@@ -1,4 +1,6 @@
 # This analysis uses data from below table 'superstore'
+# Disclaimer: The calculations provided are for demonstration purposes only. 
+#It is important to verify all calculations for accuracy and consult with a professional for any specific or critical calculations.
 
 CREATE TABLE superstore (
     item_id INTEGER PRIMARY KEY,
@@ -27,31 +29,35 @@ VALUES
     (14, 'Cutlery Set', 'Kitchen Supplies', 34.50, 40, 4.4),
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
 
-#Query all items in the table alphabetically
-SELECT item_name
+#Query all items and info in the table alphabetically to get all columns available, so a limit of 3 rows is set
+SELECT *
 FROM superstore
-ORDER BY item_name;
+ORDER BY item_name
+LIMIT 3;
 
 # Shows item and price of all items in dataset ordered from highest to lowest price
 SELECT item_name, price
 FROM superstore
 ORDER BY price desc;
 
-# Shows the item, price and rating of items with a rating higher than 4 stars
-SELECT item_name, price, average_rating
-FROM superstore
-WHERE average_rating > 4.0
-ORDER BY item_name desc;
-
 # Shows how many items(rows) have a rating higher than 4 stars
 SELECT count(item_name)
 FROM superstore
 WHERE average_rating > 4.0;
 
-# Shows the item, price of items belonging to the Kitchen Supplies category
+#Shows how many items are in each given category and the total stock of all items in category
+SELECT category, count(item_name), sum(stock_quantity) FROM superstore
+GROUP BY category
+
+# Shows the items and price of items belonging to the Kitchen Supplies category
 SELECT item_name, price
 FROM superstore
 WHERE category = 'Kitchen Supplies';
+
+# Shows category, total items in category, and total stock in categories which have less than 150 in stock
+SELECT category, count(item_name), sum(stock_quantity) as total FROM superstore
+GROUP BY category
+HAVING total < 150
 
 # Shows table's most expensive item, avg price of all items, and cheapest item in the Kitchen Supplies category
 SELECT max(price), avg(price), min(price)
@@ -63,8 +69,8 @@ SELECT item_name, stock_quantity
 FROM superstore
 WHERE item_name = 'Air Purifier';
 
-# Shows all items in Furnishings and their available quantities in alphabetical order
-SELECT item_name, stock_quantity
-FROM superstore
-WHERE category = 'Furnishings'
-ORDER BY item_name;
+# Shows items grouped by rating, the total price and total stock of items in rating category
+# where total price is greater than 60 and total stock is less than 50 
+SELECT average_rating, sum(price) as total_p, sum(stock_quantity) as stock FROM superstore
+GROUP BY average_rating
+HAVING total_p > 60 and stock < 50
